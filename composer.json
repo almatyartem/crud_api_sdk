@@ -11,8 +11,7 @@
         "php": ">=7.1",
         "ext-json": "*",
         "apisdk/request_providers": "dev-master",
-        "illuminate/support": "*",
-        "guzzlehttp/guzzle": "^6.4"
+        "illuminate/support": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
