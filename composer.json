@@ -1,32 +1,27 @@
 {
-  "name": "apisdk/apisdk",
-  "description": "API SDK",
-  "require": {
-    "php": ">=7.1",
-    "ext-json": "*",
-    "illuminate/support": "*",
-    "guzzlehttp/guzzle": "^6.4"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "autoload": {
-    "classmap": [
-      "src"
+    "name": "apisdk/crud_api",
+    "description": "API SDK",
+    "repositories":[
+        {
+            "type": "vcs",
+            "url": "git@github.com:almatyartem/request_providers_sdk.git"
+        }
     ],
-    "psr-4": {
-      "ApiSdk\\": "src/"
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "*",
+        "apisdk/request_providers": "dev-master",
+        "illuminate/support": "*",
+        "guzzlehttp/guzzle": "^6.4"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "classmap": [
+            "src"
+        ],
+        "psr-4": {
+            "ApiSdk\\": "src/"
+        }
     }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "ApiSdk\\ApiSdkServiceProvider"
-      ],
-      "aliases": {
-        "CoreApi": "ApiSdk\\Facades\\CoreApi",
-        "FilesApi": "ApiSdk\\Facades\\FilesApi",
-        "AuthApi": "ApiSdk\\Facades\\AuthApi"
-      }
-    }
-  }
 }

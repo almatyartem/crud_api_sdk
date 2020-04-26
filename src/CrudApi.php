@@ -4,7 +4,7 @@ namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
 
-class CoreApi
+class CrudApi
 {
     /**
      * @var RequestProvider
