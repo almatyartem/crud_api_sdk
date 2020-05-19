@@ -90,7 +90,7 @@ class CrudApi
      */
     public function massCreate(string $entity, array $data)
     {
-        return $this->call($entity.'/mass', 'post', ['data' => $data]);
+        return $this->call('mass/'.$entity, 'post', ['data' => $data]);
     }
 
     /**
