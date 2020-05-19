@@ -42,7 +42,7 @@ class CrudApi
 
         $params = array_merge($params, $addParams);
 
-        return $this->call($entity, 'all', null, $params);
+        return $this->call($entity, 'get', $params);
     }
 
     /**
@@ -69,7 +69,7 @@ class CrudApi
     {
         try
         {
-            return $this->call($entity, 'create', null, $data);
+            return $this->call($entity, 'post', $data);
         }
         catch(RequestProviderException $exception)
         {
@@ -82,6 +82,16 @@ class CrudApi
         }
     }
 
+    /**
+     * @param string $entity
+     * @param array $data
+     * @return array|null
+     * @throws \Exception
+     */
+    public function massCreate(string $entity, array $data)
+    {
+        return $this->call($entity.'/mass', 'post', $data);
+    }
 
     /**
      * @param string $entity
@@ -94,7 +104,7 @@ class CrudApi
     {
         try
         {
-            return $this->call($entity, 'patch', $id, $data);
+            return $this->call($entity.'/'.$id, 'patch', $data);
         }
         catch(RequestProviderException $exception)
         {
@@ -118,7 +128,7 @@ class CrudApi
     {
         try
         {
-            $result = $this->call($entity, 'delete', $id, $with ? ['with' => $with] : []);
+            $result = $this->call($entity.'/'.$id, 'delete', $with ? ['with' => $with] : []);
 
             return $result['success'] ?? false;
         }
@@ -134,36 +144,15 @@ class CrudApi
     }
 
     /**
-     * @param string $entity
-     * @param string $method
-     * @param null $id
+     * @param string $uri
+     * @param string $requestMethod
      * @param array $params
      * @return array|null
      * @throws RequestProviderException
      */
-    protected function call(string $entity, string $method, $id = null, array $params = []) : ?array
+    protected function call(string $uri, string $requestMethod, array $params = []) : ?array
     {
-        $getParams = [];
-
-        switch($method)
-        {
-            case 'create':
-                $requestMethod = 'post';
-                break;
-            case 'delete':
-                $requestMethod = 'delete';
-                break;
-            case 'patch':
-            case 'increment':
-                $requestMethod = 'patch';
-                break;
-            default:
-                $requestMethod = 'get';
-                $getParams = $params;
-        }
-
-
-        $uri = 'crud/'.$entity.($id ? '/'.$id : '').($getParams ? '?'.http_build_query($getParams) : '');
+        $uri = 'crud/'.$uri.($requestMethod == 'get' ? '?'.http_build_query($params) : '');
 
         return $this->provider->request($this->api, $requestMethod, $uri, $params);
     }
