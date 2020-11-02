@@ -16,12 +16,12 @@ class CrudApi
     /**
      * CoreApi constructor.
      * @param RequestProvider $provider
-     * @param null $api
+     * @param string $api
      */
-    public function __construct(RequestProvider $provider, $api = null)
+    public function __construct(RequestProvider $provider, string $api)
     {
         $this->provider = $provider;
-        $this->api = $api ?? 'core';
+        $this->api = $api;
     }
 
     /**
