@@ -13,15 +13,19 @@ class CrudApi
 
     public $api;
 
+    public $logAll;
+
     /**
      * CoreApi constructor.
      * @param RequestProvider $provider
      * @param string $api
+     * @param bool $logAll
      */
-    public function __construct(RequestProvider $provider, string $api)
+    public function __construct(RequestProvider $provider, string $api, bool $logAll = false)
     {
         $this->provider = $provider;
         $this->api = $api;
+        $this->logAll = $logAll;
     }
 
     /**
@@ -154,6 +158,13 @@ class CrudApi
     {
         $uri = 'crud/'.$uri.($requestMethod == 'get' ? '?'.http_build_query($params) : '');
 
-        return $this->provider->request($this->api, $requestMethod, $uri, $params);
+        $result = $this->provider->request($this->api, $requestMethod, $uri, $params);
+
+        if($this->logAll)
+        {
+            Log::info('Uri: '. $uri.', params: '.json_encode($params).', result: '.json_encode($result));
+        }
+
+        return $result;
     }
 }
