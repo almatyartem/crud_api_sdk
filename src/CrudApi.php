@@ -3,6 +3,7 @@
 namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
+use Illuminate\Support\Facades\Log;
 
 class CrudApi
 {
