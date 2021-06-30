@@ -149,6 +149,17 @@ class CrudApi
     }
 
     /**
+     * @param string $entity
+     * @param array $fields
+     * @param array $like
+     * @return array|null
+     */
+    public function search(string $entity, array $fields, array $like) : ?array
+    {
+        return $this->call('search/'.$entity, 'get', ['fields' => $fields, 'like' => $like]);
+    }
+
+    /**
      * @param string $uri
      * @param string $requestMethod
      * @param array $params
