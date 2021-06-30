@@ -66,6 +66,17 @@ class CrudApi
 
     /**
      * @param string $entity
+     * @param array $where
+     * @param array $addParams
+     * @return int
+     */
+    public function count(string $entity, array $where = [], array $addParams = []) : int
+    {
+        return $this->find($entity, $where, array_merge($addParams, ['paginate' => 1, 'count' => 1]))['total'];
+    }
+
+    /**
+     * @param string $entity
      * @param array $data
      * @return array|null
      * @throws \Exception
