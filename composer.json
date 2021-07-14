@@ -1,17 +1,25 @@
 {
-    "name": "apisdk/crud_api",
-    "description": "API SDK",
+    "name": "turbodev/games_api_sdk",
+    "description": "GamesAPI SDK",
     "repositories":[
         {
             "type": "vcs",
-            "url": "git@github.com:almatyartem/request_providers_sdk.git"
+            "url": "git@github.com:almatyartem/guzzle_wrapper.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:almatyartem/response_wrapper.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:almatyartem/logging_request_provider.git"
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": "^7.4|^8.0",
         "ext-json": "*",
-        "apisdk/request_providers": "dev-master",
-        "illuminate/support": "*"
+        "turbodev/guzzle_wrapper": "dev-master",
+        "turbodev/logging_request_provider": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -20,7 +28,7 @@
             "src"
         ],
         "psr-4": {
-            "ApiSdk\\": "src/"
+            "GamesApiSdk\\": "src/"
         }
     }
 }
