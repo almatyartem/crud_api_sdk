@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiSdk;
+namespace CrudApiSdk;
 
 use RpContracts\RequestProvider;
 

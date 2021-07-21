@@ -1,5 +1,5 @@
 {
-    "name": "apisdk/crud_api",
+    "name": "turbodev/crud_api",
     "description": "API SDK",
     "repositories":[
         {
@@ -18,7 +18,7 @@
             "src"
         ],
         "psr-4": {
-            "ApiSdk\\": "src/"
+            "CrudApiSdk\\": "src/"
         }
     }
 }
