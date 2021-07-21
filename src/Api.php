@@ -13,11 +13,6 @@ class Api
     protected RequestProvider $provider;
 
     /**
-     * @var string
-     */
-    protected string $api;
-
-    /**
      * @var bool
      */
     protected bool $throwExceptions;
@@ -28,10 +23,9 @@ class Api
      * @param string $api
      * @param bool $throwExceptions
      */
-    public function __construct(RequestProvider $provider, string $api, bool $throwExceptions = false)
+    public function __construct(RequestProvider $provider, bool $throwExceptions = false)
     {
         $this->provider = $provider;
-        $this->api = $api;
         $this->throwExceptions = $throwExceptions;
     }
 
@@ -142,7 +136,7 @@ class Api
     {
         $uri = 'crud/'.$uri.($requestMethod == 'get' ? '?'.http_build_query($params) : '');
 
-        $response = $this->provider->request($this->api.'/'.$uri, $requestMethod, $params);
+        $response = $this->provider->request($uri, $requestMethod, $params);
 
         if($this->throwExceptions and ($exception = $response->getLastException()))
         {

@@ -12,8 +12,8 @@ class CrudApi extends Api
      * @param string $api
      * @param bool $throwExceptions
      */
-    public function __construct(RequestProvider $provider, string $api, bool $throwExceptions = true)
+    public function __construct(RequestProvider $provider, bool $throwExceptions = true)
     {
-        parent::__construct($provider, $api, $throwExceptions);
+        parent::__construct($provider, $throwExceptions);
     }
 }

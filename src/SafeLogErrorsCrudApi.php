@@ -9,11 +9,10 @@ class SafeLogErrorsCrudApi extends CrudApi
     /**
      * CoreApi constructor.
      * @param RequestProvider $provider
-     * @param string $api
      */
-    public function __construct(RequestProvider $provider, string $api)
+    public function __construct(RequestProvider $provider)
     {
-        parent::__construct($provider, $api, false);
+        parent::__construct($provider, false);
     }
 
     /**
