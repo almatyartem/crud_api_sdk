@@ -131,6 +131,7 @@ class Api
      * @param string $requestMethod
      * @param array $params
      * @return Response
+     * @throws \Throwable
      */
     protected function call(string $uri, string $requestMethod, array $params = []) : Response
     {
@@ -140,7 +141,7 @@ class Api
 
         if($this->throwExceptions and ($exception = $response->getLastException()))
         {
-            throw new $exception;
+            throw $exception;
         }
 
         return $response;
