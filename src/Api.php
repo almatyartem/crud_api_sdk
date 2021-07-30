@@ -14,11 +14,6 @@ class Api
     protected RequestProvider $provider;
 
     /**
-     * @var Cache|null
-     */
-    protected ?Cache $cacheProvider;
-
-    /**
      * @var bool
      */
     protected bool $throwExceptions;
@@ -27,22 +22,21 @@ class Api
      * Api constructor.
      * @param RequestProvider $provider
      * @param bool $throwExceptions
-     * @param Cache|null $cacheProvider
      */
-    public function __construct(RequestProvider $provider, bool $throwExceptions = false, Cache $cacheProvider = null)
+    public function __construct(RequestProvider $provider, bool $throwExceptions = false)
     {
         $this->provider = $provider;
         $this->throwExceptions = $throwExceptions;
-        $this->cacheProvider = $cacheProvider;
     }
 
     /**
      * @param string $entity
      * @param array $where
      * @param array $addParams
+     * @param int|null $cacheTtl
      * @return array|null
      */
-    public function find(string $entity, array $where = [], array $addParams = []) : ?array
+    public function find(string $entity, array $where = [], array $addParams = [], int $cacheTtl = null) : ?array
     {
         $params = [];
 
@@ -53,7 +47,7 @@ class Api
 
         $params = array_merge($params, $addParams);
 
-        return $this->call($entity, 'get', $params)->getContents();
+        return $this->call($entity, 'get', $params, [], false, $cacheTtl)->getContents();
     }
 
     /**
@@ -137,28 +131,26 @@ class Api
      * @param string $uri
      * @param string $requestMethod
      * @param array $params
+     * @param array $addHeaders
+     * @param bool $postAsForm
+     * @param int|null $cacheTtl
      * @return Response
      * @throws \Throwable
      */
-    protected function call(string $uri, string $requestMethod, array $params = []) : Response
+    protected function call(string $uri,
+                            string $requestMethod,
+                            array $params = [],
+                            array $addHeaders = [],
+                            bool $postAsForm = false,
+                            int $cacheTtl = null) : Response
     {
         $uri = 'crud/'.$uri.($requestMethod == 'get' ? '?'.http_build_query($params) : '');
 
-        if($this->cacheProvider and $this->cacheProvider->has($uri))
-        {
-            return $this->cacheProvider->get($uri);
-        }
-
-        $response = $this->provider->request($uri, $requestMethod, $params);
+        $response = $this->provider->request($uri, $requestMethod, $params, $addHeaders, $postAsForm, $cacheTtl);
 
         if($this->throwExceptions and ($exception = $response->getLastException()))
         {
             throw $exception;
-        }
-
-        if($response->isSuccess() and $this->cacheProvider)
-        {
-            $this->cacheProvider->put($uri, $response);
         }
 
         return $response;
