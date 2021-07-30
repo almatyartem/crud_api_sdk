@@ -2,6 +2,7 @@
 
 namespace CrudApiSdk;
 
+use RpContracts\Cache;
 use RpContracts\RequestProvider;
 use RpContracts\Response;
 
@@ -13,6 +14,11 @@ class Api
     protected RequestProvider $provider;
 
     /**
+     * @var Cache|null
+     */
+    protected ?Cache $cacheProvider;
+
+    /**
      * @var bool
      */
     protected bool $throwExceptions;
@@ -20,13 +26,14 @@ class Api
     /**
      * Api constructor.
      * @param RequestProvider $provider
-     * @param string $api
      * @param bool $throwExceptions
+     * @param Cache|null $cacheProvider
      */
-    public function __construct(RequestProvider $provider, bool $throwExceptions = false)
+    public function __construct(RequestProvider $provider, bool $throwExceptions = false, Cache $cacheProvider = null)
     {
         $this->provider = $provider;
         $this->throwExceptions = $throwExceptions;
+        $this->cacheProvider = $cacheProvider;
     }
 
     /**
@@ -137,11 +144,21 @@ class Api
     {
         $uri = 'crud/'.$uri.($requestMethod == 'get' ? '?'.http_build_query($params) : '');
 
+        if($this->cacheProvider and $this->cacheProvider->has($uri))
+        {
+            return $this->cacheProvider->get($uri);
+        }
+
         $response = $this->provider->request($uri, $requestMethod, $params);
 
         if($this->throwExceptions and ($exception = $response->getLastException()))
         {
             throw $exception;
+        }
+
+        if($response->isSuccess() and $this->cacheProvider)
+        {
+            $this->cacheProvider->put($uri, $response);
         }
 
         return $response;
