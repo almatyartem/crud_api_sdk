@@ -47,7 +47,14 @@ class Api
 
         $params = array_merge($params, $addParams);
 
-        return $this->call($entity, 'get', $params, [], false, $cacheTtl)->getContents();
+        $response = $this->call($entity, 'get', $params, [], false, $cacheTtl);
+
+        if($response->isSuccess())
+        {
+            return $response->getContents();
+        }
+
+        return null;
     }
 
     /**
