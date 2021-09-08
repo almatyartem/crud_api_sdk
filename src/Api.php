@@ -54,13 +54,14 @@ class Api
      * @param string $entity
      * @param array $where
      * @param array $addParams
+     * @param int|null $cacheTtl
      * @return array|null
      */
-    public function findFirst(string $entity, array $where = [], array $addParams = []) : ?array
+    public function findFirst(string $entity, array $where = [], array $addParams = [], int $cacheTtl = null) : ?array
     {
         $addParams['count'] = 1;
 
-        return $this->find($entity, $where, $addParams)[0] ?? null;
+        return $this->find($entity, $where, $addParams, $cacheTtl)[0] ?? null;
     }
 
     /**
