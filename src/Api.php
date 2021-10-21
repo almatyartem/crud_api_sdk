@@ -104,6 +104,18 @@ class Api
 
     /**
      * @param string $entity
+     * @param string $field
+     * @param string $value
+     * @return array|null
+     * @throws \Throwable
+     */
+    public function massDelete(string $entity, string $field, string $value) : ?array
+    {
+        return $this->call($entity, 'delete', ['field' => $field, 'value' => $value])->getContents();
+    }
+
+    /**
+     * @param string $entity
      * @param $id
      * @param array $data
      * @return array|null
