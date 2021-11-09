@@ -61,6 +61,32 @@ class Api
      * @param string $entity
      * @param array $where
      * @param array $addParams
+     * @param int $chunkSize
+     * @return array
+     */
+    public function findByChunks(string $entity, array $where = [], array $addParams = [], int $chunkSize = 10000) : array
+    {
+        $result = [];
+
+        $addParams['paginate'] = 1;
+        $addParams['page'] = 1;
+        $addParams['count'] = $chunkSize;
+
+        do
+        {
+            $chunk = $this->find($entity, $where, $addParams);
+            $addParams['page'] = ($addParams['page'] + 1);
+            $result = array_merge($result, $chunk['data'] ?? []);
+        }
+        while($chunk['next_page_url'] ?? null);
+
+        return $result;
+    }
+
+    /**
+     * @param string $entity
+     * @param array $where
+     * @param array $addParams
      * @param int|null $cacheTtl
      * @return array|null
      */
@@ -116,6 +142,17 @@ class Api
 
     /**
      * @param string $entity
+     * @param array $conditions
+     * @return array|null
+     * @throws \Throwable
+     */
+    public function massDeleteByConditions(string $entity, array $conditions) : ?array
+    {
+        return $this->call($entity, 'delete', $conditions)->getContents();
+    }
+
+    /**
+     * @param string $entity
      * @param $id
      * @param array $data
      * @return array|null
@@ -134,17 +171,6 @@ class Api
     public function delete(string $entity, $id, $with = []) : bool
     {
         return $this->call($entity.'/'.$id, 'delete', $with ? ['with' => $with] : [])->isSuccess();
-    }
-
-    /**
-     * @param string $entity
-     * @param array $fields
-     * @param array $like
-     * @return array|null
-     */
-    public function search(string $entity, array $fields, array $like) : ?array
-    {
-        return $this->call('search/'.$entity, 'get', ['fields' => $fields, 'like' => $like])->getContents();
     }
 
     /**
