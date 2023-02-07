@@ -120,6 +120,18 @@ class Api
 
     /**
      * @param string $entity
+     * @param array $unique
+     * @param array $data
+     * @return array|null
+     * @throws \Throwable
+     */
+    public function createOrUpdate(string $entity, array $unique, array $data) : ?array
+    {
+        return $this->call($entity, 'post', ['unique' => $unique,'data' => $data])->getContents();
+    }
+
+    /**
+     * @param string $entity
      * @param array $data
      * @return array|null
      */
